@@ -3,6 +3,7 @@ import React from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext.jsx';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
+import VideoDemo from './components/VideoDemo.jsx';
 import HowItWorks from './components/HowItWorks.jsx';
 import QuickStart from './components/QuickStart.jsx';
 import DownloadApk from './components/DownloadApk.jsx';
@@ -22,6 +23,7 @@ function AppContent() {
       <Navbar />
       <main>
         <Hero />
+        <VideoDemo />
         <HowItWorks />
         <QuickStart />
         <DownloadApk />

@@ -93,6 +93,13 @@ export default function Hero() {
         {/* Primary Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4">
           <a
+            href="#demo"
+            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/35 hover:scale-[1.02] active:scale-[0.98] transition-all text-sm"
+          >
+            <span>🎬</span> Watch Demo Video
+          </a>
+
+          <a
             href="#download"
             className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/35 hover:scale-[1.02] active:scale-[0.98] transition-all text-sm"
           >

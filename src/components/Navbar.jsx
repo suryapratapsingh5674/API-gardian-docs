@@ -22,6 +22,10 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-5 text-sm">
+          <a href="#demo" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium transition-colors">
+            Demo Video
+          </a>
+
           <a href="#how-it-works" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium transition-colors">
             How it Works
           </a>
@@ -118,6 +122,9 @@ export default function Navbar() {
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 dark:border-midnight-800 bg-white dark:bg-midnight-950 px-6 py-4 flex flex-col gap-3 text-sm shadow-lg">
+          <a href="#demo" onClick={() => setMobileMenuOpen(false)} className="text-slate-700 dark:text-slate-300 font-medium py-1">
+            🎬 Watch Demo Video
+          </a>
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-slate-700 dark:text-slate-300 font-medium py-1">
             How it Works
           </a>
