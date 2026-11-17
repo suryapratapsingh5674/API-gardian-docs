@@ -1,136 +1,139 @@
 // apps/docs/src/components/QuickStart.jsx
 import React, { useState } from 'react';
 
-function CodeBlock({ code, language = 'bash' }) {
-  const [copied, setCopied] = useState(false);
-
-  function handleCopy() {
-    navigator.clipboard?.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
-  return (
-    <div className="relative group bg-gray-950 border border-gray-800 rounded-xl overflow-hidden my-3">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800/80 bg-gray-900/40 text-xs text-gray-500 font-mono">
-        <span>{language}</span>
-        <button
-          onClick={handleCopy}
-          className="text-gray-400 hover:text-white transition-colors"
-        >
-          {copied ? '✓ Copied' : 'Copy'}
-        </button>
-      </div>
-      <pre className="p-4 text-xs sm:text-sm text-gray-300 overflow-x-auto font-mono leading-relaxed">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-}
-
 export default function QuickStart() {
-  const installCode = `npm install @surya_tomar/api-guardian`;
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedInstall, setCopiedInstall] = useState(false);
 
-  const expressCode = `const express = require('express');
+  const installCommand = 'npm install @surya_tomar/api-guardian';
+
+  const sampleCode = `const express = require('express');
 const { createGuardian } = require('@surya_tomar/api-guardian');
 
 const app = express();
 app.use(express.json());
 
-// 1. Initialise API Guardian (connects in background, non-blocking)
+// 1. Initialise API Guardian
+// Automatically connects to the cloud gateway; prints a pairing QR code in terminal
 const guardian = createGuardian({
-  projectName: 'My Express API', // Display name shown on your mobile device
+  projectName: 'My Express API',
 });
 
-// 2. Your existing application routes
-app.get('/api/users', (req, res) => {
-  res.json({ users: [] });
+// ... your normal routes ...
+app.get('/api/checkout', (req, res) => {
+  throw new Error('Database connection failed!'); // Crashes the route
 });
 
-// 3. Register API Guardian error middleware AFTER all routes
-// Express error middleware requires the 4-argument signature: (err, req, res, next)
+// 2. Mount API Guardian error middleware AFTER all routes
+// Express requires the exact 4-parameter signature: (err, req, res, next)
 app.use(guardian.errorMiddleware());
 
-// 4. Your standard final error response handler
+// 3. Your standard final error response handler
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message });
 });
 
 app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+  console.log('App running on http://localhost:3000');
 });`;
 
-  return (
-    <section id="quickstart" className="max-w-5xl mx-auto px-6 py-16 border-b border-gray-800">
-      <div className="mb-10 text-center sm:text-left">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Quick Start Guide</h2>
-        <p className="text-gray-400 max-w-2xl text-sm sm:text-base">
-          Integrate API Guardian into any Express application with minimal code changes.
-        </p>
-      </div>
+  function handleCopyCode() {
+    navigator.clipboard?.writeText(sampleCode);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  }
 
-      <div className="space-y-12">
-        {/* Step 1 */}
-        <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
-              1
-            </span>
-            <h3 className="text-lg font-bold text-white">Install the SDK</h3>
-          </div>
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <p className="text-sm text-gray-400">
-              Install the lightweight package into your Express backend project:
-            </p>
+  function handleCopyInstall() {
+    navigator.clipboard?.writeText(installCommand);
+    setCopiedInstall(true);
+    setTimeout(() => setCopiedInstall(false), 2000);
+  }
+
+  return (
+    <section id="quickstart" className="py-24 px-6 transition-colors duration-200">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-14">
+          <span className="text-xs font-bold tracking-wider uppercase text-indigo-700 dark:text-blue-400 bg-indigo-50 dark:bg-blue-950/60 border border-indigo-200 dark:border-blue-800/60 px-3.5 py-1 rounded-full">
+            Fast Integration
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-4 mb-3">
+            Quick Start Guide
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+            Zero configuration required. Drop the middleware into your Express application and start receiving error notifications.
+          </p>
+        </div>
+
+        {/* Step 1: Install Command Box */}
+        <div className="bg-white dark:bg-midnight-850 border border-slate-200 dark:border-midnight-700 rounded-2xl p-6 sm:p-7 mb-8 shadow-sm dark:shadow-midnight-950/40 transition-colors">
+          <div className="flex items-center justify-between gap-4 mb-3">
+            <div className="flex items-center gap-3">
+              <span className="w-6 h-6 rounded-full bg-indigo-600 dark:bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+                1
+              </span>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                Install the SDK from npm
+              </h3>
+            </div>
             <a
               href="https://www.npmjs.com/package/@surya_tomar/api-guardian"
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-rose-400 hover:text-rose-300 transition-colors font-medium inline-flex items-center gap-1"
+              className="text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors font-semibold"
             >
-              View on npm ↗
+              npm package ↗
             </a>
           </div>
-          <CodeBlock code={installCode} language="bash" />
+
+          <div className="flex items-center justify-between bg-slate-50 dark:bg-midnight-950 border border-slate-200 dark:border-midnight-800 rounded-xl p-3.5 font-mono text-xs sm:text-sm text-slate-800 dark:text-slate-200 overflow-x-auto">
+            <span className="text-indigo-600 dark:text-blue-400 font-bold">{installCommand}</span>
+            <button
+              onClick={handleCopyInstall}
+              className="text-xs font-sans text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-midnight-800 hover:bg-slate-100 dark:hover:bg-midnight-700 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-midnight-700 shadow-sm transition-colors ml-4 flex-shrink-0 font-medium"
+            >
+              {copiedInstall ? '✓ Copied' : 'Copy'}
+            </button>
+          </div>
         </div>
 
-        {/* Step 2 */}
-        <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
-              2
-            </span>
-            <h3 className="text-lg font-bold text-white">Add Error Middleware to Express</h3>
-          </div>
-          <p className="text-sm text-gray-400 mb-3">
-            Initialize the guardian instance and mount <code className="text-indigo-300 font-mono text-xs bg-gray-950 px-1.5 py-0.5 rounded">guardian.errorMiddleware()</code> after all routes.
-          </p>
-          <CodeBlock code={expressCode} language="javascript" />
-        </div>
-
-        {/* Step 3 */}
-        <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
-              3
-            </span>
-            <h3 className="text-lg font-bold text-white">Pair Your Phone via Terminal QR</h3>
-          </div>
-          <p className="text-sm text-gray-400 mb-4">
-            When your Express application starts for the first time, a QR code will be generated in your terminal:
-          </p>
-
-          <div className="bg-gray-950 border border-gray-800 rounded-xl p-6 font-mono text-xs text-gray-400">
-            <p className="text-indigo-400 mb-2 font-bold">[API Guardian] First run detected. Registering project: "My Express API"...</p>
-            <p className="text-emerald-400 mb-4">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
-            <p className="text-white font-bold">  🛡️  API Guardian — Pair your mobile device</p>
-            <p className="text-gray-400">  Project : My Express API</p>
-            <p className="text-gray-400">  ID      : 6724fa9e08a5f07bffa8f59e</p>
-            <div className="my-4 py-3 px-4 bg-gray-900/80 inline-block rounded text-gray-300 border border-gray-800">
-              [ ▄▄▄▄▄▄▄  QR Code Displayed in Terminal  ▄▄▄▄▄▄▄ ]
+        {/* Step 2: Code Window */}
+        <div className="bg-white dark:bg-midnight-850 border border-slate-200 dark:border-midnight-700 rounded-2xl p-6 sm:p-7 shadow-sm dark:shadow-midnight-950/40 transition-colors">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <span className="w-6 h-6 rounded-full bg-indigo-600 dark:bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+                2
+              </span>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                Add Error Middleware to Express
+              </h3>
             </div>
-            <p className="text-amber-300">  ⏰ This code expires in 10 minutes.</p>
-            <p className="text-emerald-400 mt-2">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <button
+              onClick={handleCopyCode}
+              className="text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50 dark:bg-midnight-800 hover:bg-slate-100 dark:hover:bg-midnight-700 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-midnight-700 transition-colors font-medium"
+            >
+              {copiedCode ? '✓ Copied Full Code' : 'Copy Code'}
+            </button>
+          </div>
+
+          {/* Code Window with macOS dots */}
+          <div className="rounded-xl border border-slate-800 dark:border-midnight-700 overflow-hidden bg-slate-900 dark:bg-midnight-950 shadow-xl">
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-950 dark:bg-midnight-900 border-b border-slate-800 dark:border-midnight-800 text-xs text-slate-400">
+              <div className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              </div>
+              <span className="font-mono text-[11px] text-slate-400 ml-2">server.js</span>
+            </div>
+
+            <pre className="p-5 text-xs sm:text-sm text-slate-200 font-mono leading-relaxed overflow-x-auto">
+              <code>{sampleCode}</code>
+            </pre>
+          </div>
+
+          <div className="mt-4 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <span>🛡️</span>
+            <span><strong>Never swallows errors:</strong> Calls <code className="text-indigo-600 dark:text-blue-400 font-semibold">next(err)</code> so your existing loggers and response handlers always run.</span>
           </div>
         </div>
       </div>

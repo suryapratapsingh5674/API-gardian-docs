@@ -1,31 +1,40 @@
 // apps/docs/src/App.jsx
 import React from 'react';
+import { ThemeProvider, useTheme } from './context/ThemeContext.jsx';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
-import BackendStatus from './components/BackendStatus.jsx';
+import HowItWorks from './components/HowItWorks.jsx';
 import QuickStart from './components/QuickStart.jsx';
-import MiddlewareGuide from './components/MiddlewareGuide.jsx';
-import TerminalPairing from './components/TerminalPairing.jsx';
-import MobileAndApk from './components/MobileAndApk.jsx';
-import ConfigReference from './components/ConfigReference.jsx';
-import Troubleshooting from './components/Troubleshooting.jsx';
+import DownloadApk from './components/DownloadApk.jsx';
 import Footer from './components/Footer.jsx';
 
-export default function App() {
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-indigo-600 selection:text-white">
+    <div
+      className={`min-h-screen transition-colors duration-200 font-sans selection:bg-indigo-600 selection:text-white antialiased ${
+        theme === 'dark'
+          ? 'dark bg-midnight-950 text-slate-100'
+          : 'bg-slate-50 text-slate-900'
+      }`}
+    >
       <Navbar />
       <main>
         <Hero />
-        <BackendStatus />
+        <HowItWorks />
         <QuickStart />
-        <MiddlewareGuide />
-        <TerminalPairing />
-        <MobileAndApk />
-        <ConfigReference />
-        <Troubleshooting />
+        <DownloadApk />
       </main>
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

@@ -1,86 +1,120 @@
 // apps/docs/src/components/Hero.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Hero() {
-  const flowSteps = [
-    { label: 'Express Route Fails', sub: 'HTTP 500 error', icon: '💥' },
-    { label: 'SDK Middleware', sub: 'Sanitizes & deduplicates', icon: '🛡️' },
-    { label: 'Central Backend', sub: 'Stores event in MongoDB', icon: '☁️' },
-    { label: 'Expo Push Service', sub: 'High-priority delivery', icon: '⚡' },
-    { label: 'Companion App', sub: 'Alert on your phone', icon: '📱' },
-  ];
+  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState('checking'); // 'healthy' | 'unreachable' | 'checking'
+  const [latency, setLatency] = useState(null);
+
+  const installCommand = 'npm install @surya_tomar/api-guardian';
+  const liveBackendUrl = 'https://api-gardian-server-student-6afc2609f2eb2405ffa380a1.kuros.cryboy.in';
+
+  useEffect(() => {
+    async function checkHealth() {
+      const start = performance.now();
+      try {
+        const res = await fetch(`${liveBackendUrl}/health`, { signal: AbortSignal.timeout(3000) });
+        const elapsed = Math.round(performance.now() - start);
+        if (res.ok) {
+          setStatus('healthy');
+          setLatency(elapsed);
+        } else {
+          setStatus('unreachable');
+        }
+      } catch {
+        setStatus('unreachable');
+      }
+    }
+    checkHealth();
+  }, []);
+
+  function handleCopy() {
+    navigator.clipboard?.writeText(installCommand);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
-    <section className="relative overflow-hidden pt-16 pb-20 px-6 border-b border-gray-800">
-      {/* Background glow effect */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
+    <section className="relative overflow-hidden pt-16 pb-20 px-6 transition-colors duration-200">
+      {/* Dynamic atmospheric glow: Pastel in light mode, deep electric blue/indigo in dark mode */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-indigo-200/50 via-purple-200/40 to-emerald-200/40 dark:from-blue-600/20 dark:via-indigo-600/20 dark:to-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-5xl mx-auto text-center">
-        {/* Pill */}
-        <div className="inline-flex items-center gap-2 bg-indigo-950/60 border border-indigo-700/60 text-indigo-300 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-6">
-          <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
-          Developer Portfolio Tool · Open Source
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Live Status Pill */}
+        <div className="inline-flex items-center gap-2.5 bg-white/90 dark:bg-midnight-850/90 border border-slate-200/90 dark:border-midnight-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-8 shadow-sm backdrop-blur transition-colors">
+          {status === 'healthy' ? (
+            <>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-slate-700 dark:text-slate-200">Cloud Gateway Online</span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-mono text-[11px] bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/40">
+                {latency}ms
+              </span>
+            </>
+          ) : status === 'checking' ? (
+            <>
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+              <span className="text-slate-500 dark:text-slate-400">Pinging Gateway…</span>
+            </>
+          ) : (
+            <>
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              <span className="text-slate-500 dark:text-slate-400">Gateway Offline</span>
+            </>
+          )}
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-          Instant Mobile Push Alerts for{' '}
-          <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent">
+        {/* Main Catchy Heading */}
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-[1.15]">
+          Instant Mobile Push Alerts for Your{' '}
+          <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-indigo-300 dark:to-cyan-300 bg-clip-text text-transparent">
             Express API Errors
           </span>
         </h1>
 
-        <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
-          Connect your Node.js backend to a companion mobile app in under 2 minutes. When unhandled 5xx errors occur, get high-priority push notifications with sanitized stack traces before your users complain.
+        {/* Spacious, readable subtext */}
+        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          One line of Express middleware. When an unhandled 5xx error crashes your server, API Guardian sends a high-priority alert with sanitized stack traces straight to your phone.
         </p>
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-          <a
-            href="#quickstart"
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-600/25 transition-all text-sm"
+        {/* 1-Click Copyable Package Command */}
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={handleCopy}
+            className="group flex items-center gap-3 bg-white dark:bg-midnight-850 hover:bg-slate-50 dark:hover:bg-midnight-800 border border-slate-300 dark:border-midnight-700 hover:border-indigo-400 dark:hover:border-blue-500/60 px-5 py-3 rounded-2xl shadow-sm hover:shadow-md dark:shadow-midnight-950/50 transition-all text-sm font-mono text-slate-800 dark:text-slate-100"
           >
-            Get Started in 3 Steps
+            <span className="text-indigo-600 dark:text-blue-400 font-bold select-none">$</span>
+            <span className="font-semibold">{installCommand}</span>
+            <span className="text-xs font-sans font-semibold bg-indigo-50 dark:bg-blue-600/20 group-hover:bg-indigo-100 dark:group-hover:bg-blue-600/30 text-indigo-700 dark:text-blue-300 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-blue-500/30 transition-colors ml-2">
+              {copied ? '✓ Copied' : 'Copy'}
+            </span>
+          </button>
+        </div>
+
+        {/* Primary Action Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="#download"
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/35 hover:scale-[1.02] active:scale-[0.98] transition-all text-sm"
+          >
+            <span>📱</span> Download Android APK
           </a>
+
           <a
             href="https://www.npmjs.com/package/@surya_tomar/api-guardian"
             target="_blank"
             rel="noreferrer"
-            className="bg-gray-900 hover:bg-gray-800 text-rose-300 font-medium px-6 py-3.5 rounded-xl border border-rose-900/50 hover:border-rose-700 transition-all text-sm flex items-center gap-2"
+            className="inline-flex items-center gap-2 bg-white dark:bg-midnight-850 hover:bg-rose-50 dark:hover:bg-midnight-800 text-rose-600 dark:text-rose-400 font-semibold px-6 py-3.5 rounded-xl border border-rose-200 dark:border-midnight-700 shadow-sm transition-all text-sm"
           >
-            <span className="font-mono text-xs font-bold bg-rose-500 text-white px-1.5 py-0.5 rounded">npm</span>
-            npm install @surya_tomar/api-guardian ↗
+            <span className="font-mono text-xs font-bold bg-rose-600 text-white px-1.5 py-0.5 rounded">npm</span>
+            View on npm ↗
           </a>
+
           <a
-            href="#mobile-apk"
-            className="bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-300 font-medium px-6 py-3.5 rounded-xl border border-emerald-800/60 transition-all text-sm flex items-center gap-2"
+            href="#quickstart"
+            className="inline-flex items-center gap-2 bg-white dark:bg-midnight-850 hover:bg-slate-50 dark:hover:bg-midnight-800 text-slate-700 dark:text-slate-300 font-semibold px-6 py-3.5 rounded-xl border border-slate-200 dark:border-midnight-700 shadow-sm transition-all text-sm"
           >
-            <span>📱</span> Mobile App &amp; APK
+            Quick Start Guide ↓
           </a>
-        </div>
-
-        {/* Interactive Architecture Flow Banner */}
-        <div className="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 sm:p-8 text-left shadow-2xl">
-          <h2 className="text-xs font-bold text-gray-400 tracking-wider uppercase mb-6 text-center">
-            How The Alerting Pipeline Works
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 relative">
-            {flowSteps.map((step, idx) => (
-              <div
-                key={step.label}
-                className="bg-gray-950/60 border border-gray-800/80 rounded-xl p-4 flex flex-col items-center text-center relative group hover:border-indigo-600/60 transition-colors"
-              >
-                <span className="text-3xl mb-2">{step.icon}</span>
-                <span className="text-sm font-semibold text-white mb-1">{step.label}</span>
-                <span className="text-xs text-gray-400">{step.sub}</span>
-
-                {idx < flowSteps.length - 1 && (
-                  <div className="hidden sm:block absolute -right-2 top-1/2 -translate-y-1/2 text-gray-600 font-bold z-10">
-                    →
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
