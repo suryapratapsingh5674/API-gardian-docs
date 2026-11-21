@@ -32,7 +32,7 @@ export default function Footer() {
           </a>
           <span className="text-slate-300 dark:text-midnight-700">·</span>
           <a
-            href="https://api-gardian-server-student-6afc2609f2eb2405ffa380a1.kuros.cryboy.in/health"
+            href="https://api-gardian-server.onrender.com/health"
             target="_blank"
             rel="noreferrer"
             className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-blue-400 transition-colors"

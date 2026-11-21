@@ -7,7 +7,7 @@ export default function Hero() {
   const [latency, setLatency] = useState(null);
 
   const installCommand = 'npm install @surya_tomar/api-guardian';
-  const liveBackendUrl = 'https://api-gardian-server-student-6afc2609f2eb2405ffa380a1.kuros.cryboy.in';
+  const liveBackendUrl = 'https://api-gardian-server.onrender.com';
 
   useEffect(() => {
     async function checkHealth() {

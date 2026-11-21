@@ -16,7 +16,7 @@ export default function DownloadApk() {
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 bg-emerald-100/80 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Standalone Android APK · v0.1.0
+                Standalone Android APK · v0.1.1
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">

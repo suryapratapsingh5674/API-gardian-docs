@@ -15,7 +15,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <span className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">API Guardian</span>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-blue-500/10 text-indigo-700 dark:text-blue-400 border border-indigo-200 dark:border-blue-500/30">
-              v0.1.0
+              v0.1.1
             </span>
           </div>
         </a>

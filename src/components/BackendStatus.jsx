@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 export default function BackendStatus() {
-  const defaultUrl = 'https://api-gardian-server-student-6afc2609f2eb2405ffa380a1.kuros.cryboy.in';
+  const defaultUrl = 'https://api-gardian-server.onrender.com';
   const [serverUrl, setServerUrl] = useState(defaultUrl);
   const [status, setStatus] = useState('checking'); // 'healthy' | 'unreachable' | 'checking'
   const [latency, setLatency] = useState(null);
